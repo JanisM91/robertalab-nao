@@ -29,6 +29,7 @@ public class fsToken {
 	**************************************************************send and check token**********************************************************************
 	*/
 	
+	//neds to be edited to be compatible with the server. Are Dialogs possible?
 	private static boolean tokencheck(String server, int sshport, String user, String pass, JSch jsch) {
 		
 		//variables
@@ -54,7 +55,7 @@ public class fsToken {
 			if(!inputToken.equals(generatedToken)){
 				int i = JOptionPane.showConfirmDialog(null,"The token you entered was wrong. Do you want to try again?", "Wrong token. Try again?" , JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 				if (i == JOptionPane.YES_OPTION) {
-					;
+					;//repeat the tokencheck
 				} else {
 					check = false;
 					break;
@@ -63,7 +64,7 @@ public class fsToken {
 				break;
 			}
 		}
-		sshCommand(server, sshport, user, pass, jsch, "rm Roberta.py");
+		sshCommand(server, sshport, user, pass, jsch, "rm token.py");
 		return check;		
 	}
 	
@@ -196,11 +197,11 @@ public class fsToken {
 			sshCommand(server, sshport, user, pass, jsch, remove);
 		}
 		
-		System.out.println("Exit!");									//for testing only
+		System.out.println("Exit!");												//for testing only
 		
 	}
 
-	//abstract MyUserInfo needed for ssh conection
+	//abstract MyUserInfo needed for ssh conection. maybe not required. test the ssh connection without it.
 	public static abstract class MyUserInfo implements UserInfo, UIKeyboardInteractive{
 		public String getPassword(){return null;}
 		public boolean promptYesNo(String str){return false;}
