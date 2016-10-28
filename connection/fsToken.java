@@ -64,6 +64,7 @@ public class fsToken {
 				break;
 			}
 		}
+		//delete the transferred file
 		sshCommand(server, sshport, user, pass, jsch, "rm token.py");
 		return check;		
 	}
