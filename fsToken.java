@@ -46,22 +46,23 @@ public class fsToken {
 	**************************************************************send and check token**********************************************************************
 	*/
 	
-	private static boolean tokencheck(String server, int port, int sshport, String user, String pass, FTPClient ftpClient, JSch jsch) {
+	private static boolean tokencheck(String server, int sshport, String user, String pass, JSch jsch) {
 		
 		//variables
 		boolean check = true;
 		String generatedToken;
+		String transfer = "scp token.py " + user "@" + server + ":/~/robertalab"
 		
 		//store generated Token
 		generatedToken = generateToken();
-		JOptionPane.showMessageDialog(null, generatedToken);										//for testing only
+		System.out.println(generatedToken);															//for testing only
 		
 		while(check) {
 			//transfer and execute the python file that makes NAO say the generated token
 			System.out.println("tranferring token.py")												//for testing only
-			ftpTransfer(server, port, user, pass, ftpClient, "token.py");
+			sshCommand(server, sshport, user, pass, jsch, "scp token.py");
 			System.out.println("executing token check file")										//for testing only
-			sshCommand(server, sshport, user, pass, jsch, "python Roberta.py");
+			sshCommand(server, sshport, user, pass, jsch, "python token.py");
 			
 			//prompt the user to enter the token
 			String inputToken = JOptionPane.showInputDialog("Please type the token NAO just said:");
@@ -112,6 +113,10 @@ public class fsToken {
 		return token;
 	}
 	
+	/*
+	**************************************************************open SSH connection and send command**********************************************************************
+	*/
+	
 	private static void sshCommand(String server, int port, String user, String pass, JSch jsch, String command) {
 		
 		//implement the abstract class MyUserInfo
@@ -132,6 +137,7 @@ public class fsToken {
 			Session session = jsch.getSession(user, server, port);
 			session.setPassword(pass);
 			session.setUserInfo(ui);
+			
 			/*
 			//uncomment this part if key fingerprint is not accepted
 			java.util.Properties config = new java.util.Properties();
@@ -179,70 +185,8 @@ public class fsToken {
 		}
 	}
 	
-	/*
-	private static void ftpTransfer(String server, int port, String user, String password, FTPClient ftpClient, String file) {
-		
-		try {
-			//connect to ftp server(NAO)
-            ftpClient.connect(server, port);
-			
-            showServerReply(ftpClient);
-            int replyCode = ftpClient.getReplyCode();
-			
-			//print error message if connection is not established
-            if (!FTPReply.isPositiveCompletion(replyCode)) {
-                System.out.println("Operation failed. Server reply code: " + replyCode);
-                return;
-            }
-            boolean success = ftpClient.login(user, password);
-            showServerReply(ftpClient);
-			
-            if (!success) {
-                System.out.println("Could not login to the ftp server");
-                return;
-            } else {
-                System.out.println("LOGGED IN SERVER!");				//for testing only
-				
-				//Use local passive mode to avoid problems with firewalls
-				ftpClient.enterLocalPassiveMode();
-				
-				//open Input Stream and store file on the robot
-				InputStream input = new FileInputStream(file);
-				System.out.println("Transferring file.");				//for testing only
-				ftpClient.storeFile("Roberta.py",input);
-				
-				//close stream and logout
-				input.close();
-				System.out.println("LOGGING OUT!");						//for testing only
-				ftpClient.logout();
-            }
-        } catch (IOException ex) {
-            System.out.println("Something wrong happened during ftpTransfer!");
-            ex.printStackTrace();
-        }
-	}*/
-	
     public static void main(String[] args) {
-        	
-		/*
-		**************************************************************FTP**********************************************************************
-		*/
 		
-		/*
-		//Parameters needed for FTP connection. Change these to fit your needs!
-		String server = "169.254.235.8";
-		int port = 21;
-		String user = "nao";
-		String pass = "nao";
-		FTPClient ftpClient = new FTPClient();
-		String file = "StandUp.py";
-		*/
-
-		/*
-		***************************************************************SSH*********************************************************************
-		*/
-		
-		StringBuilder sb = new StringBuilder();
 		JSch jsch = new JSch();
 		
 		//these information should come from the robotconfiguration in the robertalab
@@ -250,19 +194,23 @@ public class fsToken {
 		int sshport = 22;
 		String user = "nao";
 		String pass = "nao";
+		//note: file that contains the generated python code should be named Roberta.py
+		String filename = "Roberta.py";
 		
-		String execute = "python Roberta.py";
+		String execute = "python " + filename;
+		String remove = "rm " + filename;
+		String transfer = "scp " + filename + " " + user "@" + server + ":/~/robertalab";
 		
+		//edit, currently not working
 		boolean tokenchecked = tokencheck(server, port, sshport, user, pass, ftpClient, jsch);
 		
 		if (tokenchecked) {
-			System.out.println("Token is correct. Tranfer and execute file.")					//for testing only
-			//ftpTransfer(server, port, user, pass, ftpClient, file);
-			//edit the command to react on the variables for username and host username@remotehost
-			//note: file that contains the generated python code should be named Roberta.py
-			sshCommand(server, sshport, user, pass, jsch, "scp Roberta.py nao@169.254.235.8:/~/robertalab");
+			System.out.println("Token is correct. Tranfer file.")					//for testing only
+			sshCommand(server, sshport, user, pass, jsch, transfer);
+			System.out.println("Token is correct. Execute file.")					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, execute);
-			sshCommand(server, sshport, user, pass, jsch, "rm Roberta.py");
+			System.out.println("Token is correct. Remove file.")					//for testing only
+			sshCommand(server, sshport, user, pass, jsch, remove);
 		}
 		
 		System.out.println("Exit!");									//for testing only
