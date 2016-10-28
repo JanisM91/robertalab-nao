@@ -5,7 +5,7 @@ Make a connection between robertalab and NAO possible.
 
 These files are a first approach to make it possible to establish an connection between the robertalab server and the robot NAO.
 
-This is currently under development. Further inforamtion are in the comments in the files.
+This is currently under development. Further information are in the comments in the files.
 
 * The fsToken.java file is the latest version. It transfers a token and checks it and afterwards sends a file to NAO and executes it.
 * fsconnectNew.java is the first version where the ftp and ssh parts are separated in two different methods.
