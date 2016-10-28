@@ -1,8 +1,3 @@
-'''
-Created on 06.10.2016
-
-@author: jmohr
-'''
 #Import ALProxy
 from naoqi import ALProxy
 from naoqi import ALBroker
@@ -12,7 +7,7 @@ NAO_IP = "169.254.235.8"
 #just for testing. the generated token from the .java file should be inserted here.
 generatedToken = "abcdefg"
 
-#add information for pip
+#parse command line options
 parser = OptionParser()
 parser.add_option("--pip",help="Parent broker port. The IP address or your robot", dest="pip")
 parser.add_option("--pport",help="Parent broker port. The port NAOqi is listening to",dest="pport",type="int")
@@ -30,8 +25,8 @@ myBroker = ALBroker("myBroker","0.0.0.0",   #Listen to anyone
                     pip,                    #parent broker ip
                     pport)                  #parent broker port
 
-#Create ALProxy to desired module(here: AlRobotPosture)
+#Create ALProxy to desired module(here: AlTextToSpeech)
 tts = ALProxy("ALTextToSpeech")
 
-#Call StandUp method
+#Call say() method
 tts.say(generatedToken)
