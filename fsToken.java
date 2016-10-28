@@ -3,38 +3,27 @@
 //@author: Janis Mohr
 //@date: 27.10.2016
 
-import java.io.IOException;
+//import java.io.IOException;
 import java.io.*;
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
-import java.lang.Math;
-import java.lang.StringBuilder;
-import java.security.*;
+import java.math.BigInteger;
+import java.lang.Number;
+import java.security.NoSuchAlgorithmException;
+import java.security.MessageDigest;
+import java.lang.Object;
 
-//import org.apache.commons.net.ftp.FTPClient;
-//import org.apache.commons.net.ftp.FTPReply;
 import com.jcraft.jsch.*;
 
 public class fsToken {
 	
-    private static void showServerReply(FTPClient ftpClient) {
-		
-        String[] replies = ftpClient.getReplyStrings();
-		
-        if (replies != null && replies.length > 0) {
-            for (String aReply : replies) {
-                System.out.println("SERVER: " + aReply);
-            }
-        }
-    }
-	
 	//calculate the md5 of a string
 	private String md5(String s) {
 		try {
-			MessageDigest m = new MessageDigest.getInstance("MD5");
-			m.update(s.getBytes(), 0, s.length());
-			BigInteger i = new BigInteger(1,m.digest());
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(s.getBytes(), 0, s.length());
+			BigInteger i = new BigInteger(1,md.digest());
 			return String.format("%1$032x", i);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
@@ -51,7 +40,7 @@ public class fsToken {
 		//variables
 		boolean check = true;
 		String generatedToken;
-		String transfer = "scp token.py " + user "@" + server + ":/~/robertalab"
+		String transfer = "scp token.py " + user + "@" + server + ":/~/robertalab";
 		
 		//store generated Token
 		generatedToken = generateToken();
@@ -59,9 +48,9 @@ public class fsToken {
 		
 		while(check) {
 			//transfer and execute the python file that makes NAO say the generated token
-			System.out.println("tranferring token.py")												//for testing only
+			System.out.println("tranferring token.py");												//for testing only
 			sshCommand(server, sshport, user, pass, jsch, "scp token.py");
-			System.out.println("executing token check file")										//for testing only
+			System.out.println("executing token check file");										//for testing only
 			sshCommand(server, sshport, user, pass, jsch, "python token.py");
 			
 			//prompt the user to enter the token
@@ -199,17 +188,17 @@ public class fsToken {
 		
 		String execute = "python " + filename;
 		String remove = "rm " + filename;
-		String transfer = "scp " + filename + " " + user "@" + server + ":/~/robertalab";
+		String transfer = "scp " + filename + " " + user + "@" + server + ":/~/robertalab";
 		
 		//edit, currently not working
-		boolean tokenchecked = tokencheck(server, port, sshport, user, pass, ftpClient, jsch);
+		boolean tokenchecked = tokencheck(server, sshport, user, pass, jsch);
 		
 		if (tokenchecked) {
-			System.out.println("Token is correct. Tranfer file.")					//for testing only
+			System.out.println("Token is correct. Tranfer file.");					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, transfer);
-			System.out.println("Token is correct. Execute file.")					//for testing only
+			System.out.println("Token is correct. Execute file.");					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, execute);
-			System.out.println("Token is correct. Remove file.")					//for testing only
+			System.out.println("Token is correct. Remove file.");					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, remove);
 		}
 		
