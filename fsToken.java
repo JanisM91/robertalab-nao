@@ -1,5 +1,5 @@
 //Opens a FTP connection to a NAO robot in the local network and transfers a generated Token to it. When the token is entered correctly by the user a file is transfered and executed.
-//TODO: Implement a check if the file was tranferred correctly (MD5?)
+//TODO: Implement a check if the file was transferred correctly (MD5?)
 //@author: Janis Mohr
 //@date: 27.10.2016
 
@@ -9,10 +9,11 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 import java.lang.Math;
+import java.lang.StringBuilder;
 import java.security.*;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPReply;
+//import org.apache.commons.net.ftp.FTPClient;
+//import org.apache.commons.net.ftp.FTPReply;
 import com.jcraft.jsch.*;
 
 public class fsToken {
@@ -178,7 +179,7 @@ public class fsToken {
 		}
 	}
 	
-	
+	/*
 	private static void ftpTransfer(String server, int port, String user, String password, FTPClient ftpClient, String file) {
 		
 		try {
@@ -219,7 +220,7 @@ public class fsToken {
             System.out.println("Something wrong happened during ftpTransfer!");
             ex.printStackTrace();
         }
-	}
+	}*/
 	
     public static void main(String[] args) {
         	
@@ -227,6 +228,7 @@ public class fsToken {
 		**************************************************************FTP**********************************************************************
 		*/
 		
+		/*
 		//Parameters needed for FTP connection. Change these to fit your needs!
 		String server = "169.254.235.8";
 		int port = 21;
@@ -234,37 +236,36 @@ public class fsToken {
 		String pass = "nao";
 		FTPClient ftpClient = new FTPClient();
 		String file = "StandUp.py";
-		
-		
+		*/
+
 		/*
 		***************************************************************SSH*********************************************************************
 		*/
 		
-		//Parameters needed for SSH connection. Change these to fit your needs!
-		//same as ftp
-		//String user = "nao";
-	
-		//same as ftp server
-		//String host = "169.254.235.8";
-	
-		//same as ftp password
-		//String sshpass = "nao";
-		
-		int sshport = 22;
-		String command = "python Roberta.py";
+		StringBuilder sb = new StringBuilder();
 		JSch jsch = new JSch();
 		
+		//these information should come from the robotconfiguration in the robertalab
+		String server = "169.254.235.8";
+		int sshport = 22;
+		String user = "nao";
+		String pass = "nao";
+		
+		String execute = "python Roberta.py";
 		
 		boolean tokenchecked = tokencheck(server, port, sshport, user, pass, ftpClient, jsch);
 		
 		if (tokenchecked) {
 			System.out.println("Token is correct. Tranfer and execute file.")					//for testing only
-			ftpTransfer(server, port, user, pass, ftpClient, file);
-			sshCommand(server, sshport, user, pass, jsch, command);
+			//ftpTransfer(server, port, user, pass, ftpClient, file);
+			//edit the command to react on the variables for username and host username@remotehost
+			//note: file that contains the generated python code should be named Roberta.py
+			sshCommand(server, sshport, user, pass, jsch, "scp Roberta.py nao@169.254.235.8:/~/robertalab");
+			sshCommand(server, sshport, user, pass, jsch, execute);
 			sshCommand(server, sshport, user, pass, jsch, "rm Roberta.py");
 		}
 		
-		System.out.println("Token is not correct. Exit!");									//for testing only
+		System.out.println("Exit!");									//for testing only
 		
 	}
 
