@@ -9,6 +9,7 @@ from naoqi import ALBroker
 from optparse import OptionParser
 
 NAO_IP = "169.254.235.8"
+#just for testing. the generated token from the .java file should be inserted here.
 generatedToken = "abcdefg"
 
 #add information for pip
