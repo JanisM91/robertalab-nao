@@ -1,13 +1,7 @@
-//Opens a FTP connection to a NAO robot in the local network and transfers a generated Token to it. When the token is entered correctly by the user a file is transfered and executed.
-//TODO: Implement a check if the file was transferred correctly (MD5?)
-//@author: Janis Mohr
-//@date: 27.10.2016
+//Opens a SSH connection to a NAO robot in the local network and transfers a generated Token to it. When the token is entered correctly by the user a file is transferred and executed.
 
-//import java.io.IOException;
-import java.io.*;
-import java.awt.*;
-import javax.swing.*;
-import java.util.*;
+import java.io.InputStream;
+import javax.swing.JOptionPane;
 import java.math.BigInteger;
 import java.lang.Number;
 import java.security.NoSuchAlgorithmException;
