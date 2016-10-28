@@ -17,7 +17,7 @@ This is currently under development. Further information are in the comments in 
 
 A NAO V4 or V5 is required and you need the latest version of [Java](https://java.com/de/download/).
 Additionaly these two .jar's are required:
-* For the ftp connection: [ApacheCommonsNet](https://commons.apache.org/proper/commons-net/download_net.cgi)
+* ~~For the ftp connection: [ApacheCommonsNet](https://commons.apache.org/proper/commons-net/download_net.cgi)~~
 * For the ssh connection: [JavaSecureChannel](http://www.jcraft.com/jsch/)
 
 If you want to edit the .py files that are made for NAO you also need the latest Python SDK from [SoftbankRobotics](https://www.ald.softbankrobotics.com/en).
@@ -28,14 +28,14 @@ To try it out:
     Clone the repository: git clone git://github.com/OpenRoberta/robertalab-nao.git
 
 Open fsToken.java in your favourite editor. Edit the configuration parameters(ip,port,...) to fit your needs. You need the two additional .jar's mentioned above in the same path as your fsToken.java file.
-* Compile it: javac -cp commons-net-3.1.jar;jsch-0.1.54.jar fsToken.java
-* Execute it: java -cp commons-net-3.1.jar;jsch-0.1.54.jar;. fsToken
+* Compile it: javac -cp ~~commons-net-3.1.jar;~~jsch-0.1.54.jar fsToken.java
+* Execute it: java -cp ~~commons-net-3.1.jar;~~jsch-0.1.54.jar;. fsToken
 
 
 ### TODO
 
 * ~~The transfer can be done via SSH. The ftp part is not necessary and should therefore be deleted. The method 'sshcommand' has to be extended.~~ **DONE**
-* String for file copying over SSH/SCP should be generated out of variables
+* ~~String for file copying over SSH/SCP should be generated out of variables~~ **DONE**
 * information about host and user should be obtained from robotconfiguration
 * The transferred files should be checked. (Maybe via MD5) Method is implemented but not used yet.
 * improve the random token generation
