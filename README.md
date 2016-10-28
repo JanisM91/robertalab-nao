@@ -25,7 +25,7 @@ If you want to edit the .py files that are made for NAO you also need the latest
 
 To try it out:
 
-    Clone the repository: git clone git://github.com/JanisM91/naoconnect.git
+    Clone the repository: git clone git://github.com/OpenRoberta/robertalab-nao.git
 
 Open fsToken.java in your favourite editor. Edit the configuration parameters(ip,port,...) to fit your needs. You need the two additional .jar's mentioned above in the same path as your fsToken.java file.
 * Compile it: javac -cp commons-net-3.1.jar;jsch-0.1.54.jar fsToken.java
