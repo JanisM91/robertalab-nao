@@ -92,7 +92,7 @@ public class fsToken {
 	}
 	
 	private static String generateToken() {
-		//chars that are used for the token
+		//currently all chars are used for the token. test if some are hard to understand and consider ot delete them.
 		String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String token = getTokenString(8,chars);
 		return token;
