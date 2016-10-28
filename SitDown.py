@@ -1,16 +1,10 @@
-'''
-Created on 06.10.2016
-
-@author: jmohr
-'''
-
 from naoqi import ALProxy
 from naoqi import ALBroker
 from optparse import OptionParser
 
 NAO_IP = "169.254.235.8"
 
-#add information for pip
+#parse command line options
 parser = OptionParser()
 parser.add_option("--pip",help="Parent broker port. The IP address or your robot", dest="pip")
 parser.add_option("--pport",help="Parent broker port. The port NAOqi is listening to",dest="pport",type="int")
