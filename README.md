@@ -1,7 +1,15 @@
 # robertalab-nao
 
+### Introduction
+Make a connection between robertalab and NAO possible and allow the robertalab to generate python code for NAO.
+
+### Folder nao python files
+
+These python files are made to run on a NAO. Some will only work as remote module. You need to change the ip in order to make htese work on your robot. The structure of the folders reprents the structure that is planned for the implementation of the robot NAO into the Open Roberta Lab.
+
+The playground.py is used to test the qimessaging service.
+
 ### Folder connection
-Make a connection between robertalab and NAO possible.
 
 These files are a first approach to make it possible to establish an connection between the robertalab server and the robot NAO.
 
@@ -17,26 +25,25 @@ This is currently under development. Further information are in the comments in 
 
 
 
-#### Testing
+### Testing
 
 A NAO V4 or V5 is required and you need the latest version of [Java](https://java.com/de/download/).
-Additionaly these two .jar's are required:
+Additionaly these .jar's are required:
 * ~~For the ftp connection: [ApacheCommonsNet](https://commons.apache.org/proper/commons-net/download_net.cgi)~~
 * For the ssh connection: [JavaSecureChannel](http://www.jcraft.com/jsch/)
 
-If you want to edit the .py files that are made for NAO you also need the latest Python SDK from [SoftbankRobotics](https://www.ald.softbankrobotics.com/en).
-
+If you want to edit the .py files that are made for NAO you also need [Python](https://www.python.org/) and the latest Python SDK from [SoftbankRobotics](https://www.ald.softbankrobotics.com/en).
 
 To try it out:
 
     Clone the repository: git clone https://github.com/OpenRoberta/robertalab-nao.git
 
-Open fsToken.java in your favourite editor. Edit the configuration parameters(ip,port,...) to fit your needs. You need the two additional .jar's mentioned above in the same path as your fsToken.java file.
+Open fsToken.java in your favourite editor. Edit the configuration parameters(ip,port,...) to fit your needs. You need the additional .jar's mentioned above in the same path as your fsToken.java file.
 * Compile it: javac -cp ~~commons-net-3.1.jar;~~jsch-0.1.54.jar fsToken.java
 * Execute it: java -cp ~~commons-net-3.1.jar;~~jsch-0.1.54.jar;. fsToken
 
 
-#### TODO
+### TODO
 
 * ~~The transfer can be done via SSH. The ftp part is not necessary and should therefore be deleted. The method 'sshcommand' has to be extended.~~ **DONE**
 * ~~String for file copying over SSH/SCP should be generated out of variables~~ **DONE**
@@ -44,3 +51,4 @@ Open fsToken.java in your favourite editor. Edit the configuration parameters(ip
 * The transferred files should be checked. (Maybe via MD5) Method is implemented but not used yet.
 * improve the random token generation
 * make the connection compatible to robertalab
+* rename/translate the python files and folders
