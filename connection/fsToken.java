@@ -1,6 +1,9 @@
 //Opens a SSH connection to a NAO robot in the local network and transfers a generated Token to it. When the token is entered correctly by the user a file is transferred and executed.
 
 import java.io.InputStream;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileInputStream;
 import javax.swing.JOptionPane;
 import java.math.BigInteger;
 import java.lang.Number;
@@ -12,25 +15,15 @@ import com.jcraft.jsch.*;
 
 public class fsToken {
 	
-	//calculate the md5 of a string
-	private String md5(String s) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(s.getBytes(), 0, s.length());
-			BigInteger i = new BigInteger(1,md.digest());
-			return String.format("%1$032x", i);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-		return null;		
-	}
-	
 	/*
 	**************************************************************send and check token**********************************************************************
 	*/
 	
-	//neds to be edited to be compatible with the server. Are Dialogs possible?
+	//neds to be edited to be compatible with the server. Are Dialogs possible on serverside?
 	private static boolean tokencheck(String server, int sshport, String user, String pass, JSch jsch) {
+		
+		//set this as true to enable the comparison of the copied token with the generated one
+		final boolean MD5CHECK = false;
 		
 		//variables
 		boolean check = true;
@@ -47,6 +40,13 @@ public class fsToken {
 			sshCommand(server, sshport, user, pass, jsch, "scp token.py");
 			System.out.println("executing token check file");										//for testing only
 			sshCommand(server, sshport, user, pass, jsch, "python token.py");
+			
+			if(MD5CHECK) {
+				if(!validateTransfer(server, sshport, user, pass, generatedToken, jsch)) {
+					System.out.println("Error! MD5 sums don't match. Transfer failed!");
+					System.exit(-1);
+				}
+			}
 			
 			//prompt the user to enter the token
 			String inputToken = JOptionPane.showInputDialog("Please type the token NAO just said:");
@@ -92,10 +92,149 @@ public class fsToken {
 	}
 	
 	private static String generateToken() {
-		//currently all chars are used for the token. test if some are hard to understand and consider ot delete them.
+		//currently all chars are used for the token. test if some are hard to understand and consider to delete them.
 		String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String token = getTokenString(8,chars);
 		return token;
+	}
+	
+	/*
+	**************************************************************validate if the transfer was correct**********************************************************************
+	*/
+	
+	//get the md5 sum of a string
+	private static String getMd5(String s) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(s.getBytes(), 0, s.length());
+			BigInteger i = new BigInteger(1,md.digest());
+			return String.format("%1$032x", i);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return null;		
+	}
+	
+	public static String getMd5FromFile(String filename) throws Exception {
+       byte[] b = createChecksum(filename);
+       String result = null;
+
+       for (int i=0; i < b.length; i++) {
+           result += Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
+       }
+       return result;
+   }
+   
+   public static byte[] createChecksum(String filename) throws Exception {
+       InputStream fis =  new FileInputStream(filename);
+
+       byte[] buffer = new byte[1024];
+       MessageDigest complete = MessageDigest.getInstance("MD5");
+       int numRead;
+
+       do {
+           numRead = fis.read(buffer);
+           if (numRead > 0) {
+               complete.update(buffer, 0, numRead);
+           }
+       } while (numRead != -1);
+
+       fis.close();
+       return complete.digest();
+   }
+
+	
+	//get the content of a .txt file as a String
+	private static String readFile(String filename)throws Exception {
+		String data = null;
+		try(BufferedReader br = new BufferedReader(new FileReader(filename))) {
+			StringBuilder sb = new StringBuilder();
+			String line = br.readLine();
+
+			while (line != null) {
+				sb.append(line);
+				sb.append(System.lineSeparator());
+				line = br.readLine();
+			}
+			data = sb.toString();
+		}
+		return data;
+	}
+	
+	//merge to one method
+	private static boolean validateTransfer(String server, int sshport, String user, String pass, JSch jsch) {
+		
+		//transfer and execute the python file that gets the md5 sum of a string and copy it back to local
+		System.out.println("tranferring md5.py \n");												//for testing only
+		sshCommand(server, sshport, user, pass, jsch, "scp md5.py");
+		System.out.println("executing md5.py \n");													//for testing only
+		sshCommand(server, sshport, user, pass, jsch, "python md5.py");
+		System.out.println("transferring the md5.txt to local \n");									//for testing only
+		String command = "scp " + user + "@" + server + ":/~/md5nao.txt" + " md5nao.txt";
+		sshCommand(server, sshport, user, pass, jsch, command);
+		System.out.println("removing the md5.py file \n");											//for testing only
+		sshCommand(server, sshport, user, pass, jsch, "rm md5.py");
+		sshCommand(server, sshport, user, pass, jsch, "rm md5nao.txt");
+		
+		
+		String md5nao = null, md5local = null;
+		
+		System.out.println("getting the md5 sum of the copied token \n");							//for testing only
+		try {
+			md5nao = readFile("md5nao.txt");
+		} catch (Exception e) {
+			System.out.println("Can't read file." + e);
+		}
+		
+		System.out.println("getting the md5 sum of the local token \n");		//for testing only
+		try{
+			md5local = getMd5FromFile("Roberta.py");
+		} catch (Exception e) {
+			System.out.println("Can't open or read file");
+			System.exit(-1);
+		}
+		
+		
+		System.out.println("comparing the md5 sums \n");											//for testing only
+		if(md5nao.equals(md5local))
+			return true;
+		
+		return false;
+	}
+	
+	//only for validating that the token is copied correct.
+	private static boolean validateTransfer(String server, int sshport, String user, String pass, String generatedToken, JSch jsch) {
+		
+		//transfer and execute the python file that gets the md5 sum of a string and copy it back to local
+		System.out.println("tranferring md5token.py \n");												//for testing only
+		sshCommand(server, sshport, user, pass, jsch, "scp md5.py");
+		System.out.println("executing md5token.py \n");													//for testing only
+		sshCommand(server, sshport, user, pass, jsch, "python md5token.py");
+		System.out.println("transferring the md5naotoken.txt to local \n");									//for testing only
+		String command = "scp " + user + "@" + server + ":/~/md5naotoken.txt" + " md5naotoken.txt";
+		sshCommand(server, sshport, user, pass, jsch, command);
+		System.out.println("removing the md5token.py file \n");											//for testing only
+		sshCommand(server, sshport, user, pass, jsch, "rm md5token.py");
+		sshCommand(server, sshport, user, pass, jsch, "rm md5naotoken.txt");
+		
+		
+		String md5nao = null, md5local = null;
+		
+		System.out.println("getting the md5 sum of the copied token \n");							//for testing only
+		try {
+			md5nao = readFile("md5naotoken.txt");
+		} catch (Exception e) {
+			System.out.println("Can't read file." + e);
+		}
+		
+		System.out.println("getting the md5 sum of the local token \n");							//for testing only
+		md5local = getMd5(generatedToken);
+		
+		System.out.println("comparing the md5 sums \n");											//for testing only
+		if(md5nao.equals(md5local))
+			return true;
+		
+		return false;
 	}
 	
 	/*
@@ -172,6 +311,9 @@ public class fsToken {
 	
     public static void main(String[] args) {
 		
+		//only set true if the transfer should be validated with MD5 Checksum
+		final boolean CHECKTRANSFER = false;
+		
 		JSch jsch = new JSch();
 		
 		//these information should come from the robotconfiguration in the robertalab
@@ -184,17 +326,23 @@ public class fsToken {
 		
 		String execute = "python " + filename;
 		String remove = "rm " + filename;
-		String transfer = "scp " + filename + " " + user + "@" + server + ":/~/robertalab";
+		String transfer = "scp " + filename + " " + user + "@" + server + ":/~/";
 		
-		//edit, currently not working
 		boolean tokenchecked = tokencheck(server, sshport, user, pass, jsch);
 		
 		if (tokenchecked) {
-			System.out.println("Token is correct. Tranfer file.");					//for testing only
+			System.out.println("Token is correct. Transfer file.\n");					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, transfer);
-			System.out.println("Token is correct. Execute file.");					//for testing only
+			
+			if(CHECKTRANSFER){
+				if(!validateTransfer(server, sshport, user, pass, jsch)) {
+					System.out.println("Error! MD5 sums don't match. Transfer failed!");
+					System.exit(-1);
+				}
+			}
+			System.out.println("Token is correct. Execute file.\n");					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, execute);
-			System.out.println("Token is correct. Remove file.");					//for testing only
+			System.out.println("Token is correct. Remove file.\n");					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, remove);
 		}
 		
