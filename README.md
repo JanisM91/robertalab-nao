@@ -48,7 +48,7 @@ Open fsToken.java in your favourite editor. Edit the configuration parameters(ip
 * ~~The transfer can be done via SSH. The ftp part is not necessary and should therefore be deleted. The method 'sshcommand' has to be extended.~~ **DONE**
 * ~~String for file copying over SSH/SCP should be generated out of variables~~ **DONE**
 * information about host and user should be obtained from robotconfiguration
-* The transferred files should be checked. (Maybe via MD5) Method is implemented but not used yet.
+* The transferred files should be checked. (Maybe via MD5) Method is implemented but not used yet. An additional file needs to be transferred on the robot to do this. Implement this with a switch to disable it.
 * improve the random token generation
 * make the connection compatible to robertalab
 * ~~rename/translate the python files and folders~~ **DONE**
