@@ -51,4 +51,4 @@ Open fsToken.java in your favourite editor. Edit the configuration parameters(ip
 * The transferred files should be checked. (Maybe via MD5) Method is implemented but not used yet.
 * improve the random token generation
 * make the connection compatible to robertalab
-* rename/translate the python files and folders
+* ~~rename/translate the python files and folders~~ **DONE**
