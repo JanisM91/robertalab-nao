@@ -1,4 +1,4 @@
-# naoconnect
+# robertalab-nao
 
 ### Introduction
 Make a connection between robertalab and NAO possible.
