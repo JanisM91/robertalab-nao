@@ -5,7 +5,7 @@ Make a connection between robertalab and NAO possible and allow the robertalab t
 
 ### Folder nao python files
 
-These python files are made to run on a NAO. Some will only work as remote module. You need to change the ip in order to make htese work on your robot. The structure of the folders reprents the structure that is planned for the implementation of the robot NAO into the Open Roberta Lab.
+These python files are made to run on a NAO. Some will only work as remote module. You need to change the ip in order to make these work on your robot. The structure of the folders reprents the structure that is planned for the implementation of the robot NAO into the Open Roberta Lab.
 
 The playground.py is used to test the qimessaging service.
 
@@ -17,7 +17,7 @@ This is currently under development. Further information are in the comments in 
 
 * The naoconnect.java file is the latest version. It transfers a token and checks it and afterwards sends a file to NAO and executes it.
 * SitDown.py and StandUp.py are two files that are transferred for testing purposes.
-* token.py is transferred to a remote NAO by fsToken.java and makes NAO say a generated token.
+* token.py is transferred to a remote NAO by naoconnect.java and makes NAO say a randomly generated token.
 
 * the following files are deprecated and are considered to document the progress before the project was made available on GitHub
 * fsconnectNew.java is the first version where the ftp and ssh parts are separated in two different methods.
