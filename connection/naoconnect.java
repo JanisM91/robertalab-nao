@@ -414,10 +414,11 @@ public class naoconnect {
 		
 		//these information should come from the robotconfiguration in the robertalab
 		String server = "169.254.235.8";
-		int sshport = 22;
-		int ftpport = 21;
 		String user = "nao";
 		String pass = "nao";
+		
+		int sshport = 22;
+		int ftpport = 21;
 		
 		//note: file that contains the generated python code should be named Roberta.py
 		String filename = "Roberta.py";
