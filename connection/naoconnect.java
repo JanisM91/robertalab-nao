@@ -229,7 +229,6 @@ public class naoconnect {
 		sshCommand(server, sshport, user, pass, jsch, "rm md5.py");
 		sshCommand(server, sshport, user, pass, jsch, "rm md5nao.txt");
 		
-		
 		String md5nao = null, md5local = null;
 		
 		System.out.println("getting the md5 sum of the copied token \n");							//for testing only
@@ -433,7 +432,10 @@ public class naoconnect {
 		
 		//only set true if the transfer should be validated with MD5 Checksum
 		final boolean CHECKTRANSFER = false;
+		//set true if a token should be generated, tranferred and checked
 		final boolean CHECKTOKEN = true;
+		//set true if the hal file should be transferred first
+		final boolean TRANSFERHAL = false;
 		
 		JSch jsch = new JSch();
 		FTPClient ftpClient = new FTPClient();
@@ -452,7 +454,10 @@ public class naoconnect {
 		String remove = "rm " + filename;
 		
 		if(CHECKTOKEN)
-		tokenchecked = tokencheck(server, sshport, user, pass, jsch, ftpClient);
+			tokenchecked = tokencheck(server, sshport, user, pass, jsch, ftpClient);
+	
+		if(TRANSFERHAL)
+			ftpTransfer(server, ftpport, user, pass, "hal.py", false, false, ftpClient);
 		
 		if (tokenchecked) {
 			System.out.println("Token is correct. Transfer file.\n");					//for testing only
@@ -464,7 +469,7 @@ public class naoconnect {
 					System.exit(-1);
 				}
 			}
-			System.out.println("Token is correct. Execute file.\n");					//for testing only
+			System.out.println("Token is correct. Execute file.\n");				//for testing only
 			sshCommand(server, sshport, user, pass, jsch, execute);
 			System.out.println("Token is correct. Remove file.\n");					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, remove);
