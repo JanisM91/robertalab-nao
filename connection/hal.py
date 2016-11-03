@@ -27,10 +27,11 @@ motion = ALProxy("ALMotion")
 memory = ALProxy("ALMemory")
 #tracker = ALProxy("ALTracker")
 #mark = ALProxy("ALLandMarkDetection")
-#photo = ALProxy("ALPhotoCapture")
+photo = ALProxy("ALPhotoCapture")
 sonar = ALProxy("ALSonar")
 tts = ALProxy("ALTextToSpeech")
 led = ALProxy("ALLedsProxy")
+video = ALProxy("ALVideoRecorder")
 
 
 #Move
@@ -296,3 +297,29 @@ def sonar():
 
     #Unsubscribe from sonars and stop them (at Hardware level)
     sonar.unsubscribe("TestApplication")
+
+def recordVideo():
+    recordFolder = "/home/nao/recordings/cameras/"
+
+    # 0 - 160*120  1 - 320*240  2 - 640*480
+    video.setResolution(2)
+
+    # 0 - Top  1 - Bottom
+    video.setCameraID(0)
+
+    video.setVideoFormat("MJPG")
+
+    video.startRecording(recordFolder, "robertaVideo")
+
+def takePicture():
+    recordFolder = "/home/nao/recordings/cameras/"
+
+    # 0 - 160*120  1 - 320*240  2 - 640*480  3 - 1280*960
+    photo.setResolution(1)
+
+    # 0 - Top  1 - Bottom
+    photo.setCameraID(0)
+
+    photo.setPictureFormat("jpg")
+
+    photo.takePicture(recordFolder, "robertaPhoto")
