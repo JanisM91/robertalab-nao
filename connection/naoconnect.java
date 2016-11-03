@@ -145,8 +145,8 @@ public class naoconnect {
 			writer.write(System.lineSeparator());
 			writer.write("tts = ALProxy(\"ALTextToSpeech\")");
 			writer.write(System.lineSeparator());
-			writer.write("tts.say(\"Hallo. Ich lese dir jetzt den Token vor: \" +generatedToken)");
-			writer.write(System.lineSeparator());	
+			writer.write("tts.say(\"Hello. I read out the token now: \" + generatedToken)");
+			writer.write(System.lineSeparator());
 		}
 	}
 	
