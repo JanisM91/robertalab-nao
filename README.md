@@ -33,7 +33,7 @@ Additionaly these .jar's are required:
 * For the ftp connection: [ApacheCommonsNet](https://commons.apache.org/proper/commons-net/download_net.cgi)
 * For the ssh connection: [JavaSecureChannel](http://www.jcraft.com/jsch/)
 
-If you want to edit the .py files that are made for NAO you also need [Python](https://www.python.org/) and the latest Python SDK from [SoftbankRobotics](https://www.ald.softbankrobotics.com/en).
+If you want to edit the .py files that are made for NAO you also need [Python](https://www.python.org/) and the latest Python SDK from [Softbank Robotics](https://www.ald.softbankrobotics.com/en).
 
 To try it out:
 
