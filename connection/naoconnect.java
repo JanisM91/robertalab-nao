@@ -56,7 +56,7 @@ public class naoconnect {
 			sshCommand(server, sshport, user, pass, jsch, "python token.py");
 			
 			if(MD5CHECK) {
-				if(!validateTransfer(server, sshport, user, pass, generatedToken, jsch)) {
+				if(!validateTransfer(server, sshport, 21, user, pass, generatedToken, jsch, ftpClient, true)) {
 					System.out.println("Error! MD5 sums don't match. Transfer failed!");
 					System.exit(-1);
 				}
@@ -154,7 +154,7 @@ public class naoconnect {
 	**************************************************************validate if the transfer was correct**********************************************************************
 	*/
 	
-	//get the md5 sum of a string
+	/*get the md5 sum of a string, not used after recent changes in validateTransfer
 	private static String getMd5(String s) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -165,7 +165,7 @@ public class naoconnect {
 			e.printStackTrace();
 		}
 		return null;		
-	}
+	}*/
 	
 	public static String getMd5FromFile(String filename) throws Exception {
        byte[] b = createChecksum(filename);
@@ -214,75 +214,47 @@ public class naoconnect {
 	}
 	
 	//merge to one method
-	private static boolean validateTransfer(String server, int sshport, int ftpport, String user, String pass, JSch jsch, FTPClient ftpClient) {
+	private static boolean validateTransfer(String server, int sshport, int ftpport, String user, String pass, JSch jsch, FTPClient ftpClient, boolean token) {
 		
-		//transfer and execute the python file that gets the md5 sum of a string and copy it back to local
-		System.out.println("tranferring md5.py \n");												//for testing only
-		ftpTransfer(server, ftpport, user, pass, "md5.py", false, false, ftpClient);
-		System.out.println("executing md5.py \n");													//for testing only
-		sshCommand(server, sshport, user, pass, jsch, "python md5.py");
-		System.out.println("transferring the md5.txt to local \n");									//for testing only
-		ftpTransfer(server, ftpport, user, pass, "md5nao.txt", false, true, ftpClient);
-		//String command = "scp " + user + "@" + server + ":/~/md5nao.txt" + " md5nao.txt";
-		//sshCommand(server, sshport, user, pass, jsch, command);
-		System.out.println("removing the md5.py file \n");											//for testing only
-		sshCommand(server, sshport, user, pass, jsch, "rm md5.py");
-		sshCommand(server, sshport, user, pass, jsch, "rm md5nao.txt");
-		
-		String md5nao = null, md5local = null;
-		
-		System.out.println("getting the md5 sum of the copied token \n");							//for testing only
-		try {
-			md5nao = readFile("md5nao.txt");
-		} catch (Exception e) {
-			System.out.println("Can't read file." + e);
+		String pyFile, txtFile, md5nao = null, md5local = null;
+		if(token) {
+			pyFile = "md5token.py";
+			txtfile = "md5naotoken.txt"
+			localFile = "token.py";
+		} else {
+			pyFile = "md5.py"
+			txtFile = "md5nao.txt";
+			localFile = "Roberta.py";
 		}
+			
+		//transfer and execute the python file that gets the md5 sum of a string and copy it back to local
+		System.out.println("tranferring md5token.py \n");												//for testing only
+		ftpTransfer(server, ftpport, user, pass, pyFile, false, false, ftpClient);
+		System.out.println("executing md5token.py \n");													//for testing only
+		sshCommand(server, sshport, user, pass, jsch, "python " + pyFile);
+		System.out.println("transferring the md5naotoken.txt to local \n");								//for testing only
+		ftpTransfer(server, ftpport, user, pass, txtFile, false, true, ftpClient);
+		System.out.println("removing the md5token.py file \n");											//for testing only
+		sshCommand(server, sshport, user, pass, jsch, "rm " + pyFile);
+		sshCommand(server, sshport, user, pass, jsch, "rm " + txtFile);
 		
-		System.out.println("getting the md5 sum of the local token \n");		//for testing only
+		System.out.println("getting the md5 sum of the copied file \n");								//for testing only
+		try {
+			md5nao = readFile(txtFile);
+			} catch (Exception e) {
+				System.out.println("Can't read file. " + e);
+			}
+		System.out.println(md5nao);																		//for testing only
+		
+		System.out.println("getting the md5 sum of the local file \n");									//for testing only
 		try{
-			md5local = getMd5FromFile("Roberta.py");
+			md5local = getMd5FromFile(localFile);
 		} catch (Exception e) {
 			System.out.println("Can't open or read file");
 			System.exit(-1);
 		}
 		
-		
-		System.out.println("comparing the md5 sums \n");											//for testing only
-		if(md5nao.equals(md5local))
-			return true;
-		
-		return false;
-	}
-	
-	//only for validating that the token is copied correct.
-	private static boolean validateTransfer(String server, int sshport, String user, String pass, String generatedToken, JSch jsch) {
-		
-		//transfer and execute the python file that gets the md5 sum of a string and copy it back to local
-		System.out.println("tranferring md5token.py \n");												//for testing only
-		sshCommand(server, sshport, user, pass, jsch, "scp md5.py");
-		System.out.println("executing md5token.py \n");													//for testing only
-		sshCommand(server, sshport, user, pass, jsch, "python md5token.py");
-		System.out.println("transferring the md5naotoken.txt to local \n");									//for testing only
-		String command = "scp " + user + "@" + server + ":/~/md5naotoken.txt" + " md5naotoken.txt";
-		sshCommand(server, sshport, user, pass, jsch, command);
-		System.out.println("removing the md5token.py file \n");											//for testing only
-		sshCommand(server, sshport, user, pass, jsch, "rm md5token.py");
-		sshCommand(server, sshport, user, pass, jsch, "rm md5naotoken.txt");
-		
-		
-		String md5nao = null, md5local = null;
-		
-		System.out.println("getting the md5 sum of the copied token \n");							//for testing only
-		try {
-			md5nao = readFile("md5naotoken.txt");
-		} catch (Exception e) {
-			System.out.println("Can't read file." + e);
-		}
-		
-		System.out.println("getting the md5 sum of the local token \n");							//for testing only
-		md5local = getMd5(generatedToken);
-		
-		System.out.println("comparing the md5 sums \n");											//for testing only
+		System.out.println("comparing the md5 sums: \n");												//for testing only
 		if(md5nao.equals(md5local))
 			return true;
 		
@@ -446,12 +418,12 @@ public class naoconnect {
 		int ftpport = 21;
 		String user = "nao";
 		String pass = "nao";
+		
 		//note: file that contains the generated python code should be named Roberta.py
 		String filename = "Roberta.py";
-		
-		boolean tokenchecked = false;
 		String execute = "python " + filename;
 		String remove = "rm " + filename;
+		boolean tokenchecked = false;
 		
 		if(CHECKTOKEN)
 			tokenchecked = tokencheck(server, sshport, user, pass, jsch, ftpClient);
@@ -464,7 +436,7 @@ public class naoconnect {
 			ftpTransfer(server, ftpport, user, pass, "SitDown.py", true, false, ftpClient);
 			
 			if(CHECKTRANSFER){
-				if(!validateTransfer(server, sshport, ftpport, user, pass, jsch, ftpClient)) {
+				if(!validateTransfer(server, sshport, ftpport, user, pass, jsch, ftpClient, false)) {
 					System.out.println("Error! MD5 sums don't match. Transfer failed! Please try again.");
 					System.exit(-1);
 				}
@@ -474,9 +446,7 @@ public class naoconnect {
 			System.out.println("Token is correct. Remove file.\n");					//for testing only
 			sshCommand(server, sshport, user, pass, jsch, remove);
 		}
-		
 		System.out.println("Exit!");												//for testing only
-		
 	}
 
 	//abstract MyUserInfo needed for ssh conection. maybe not required. test the ssh connection without it.
