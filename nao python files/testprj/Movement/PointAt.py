@@ -1,9 +1,3 @@
-'''
-Created on 13.10.2016
-
-@author: jmohr
-'''
-
 from naoqi import ALProxy
 
 trackerProxy = ALProxy("ALTracker","192.167.178.1",9559)
