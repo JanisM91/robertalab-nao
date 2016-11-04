@@ -50,6 +50,7 @@ Open naoconnect.java in your favourite editor. Edit the configuration parameters
 * informations (server, user, password) should be obtained from robotconfiguration
 * improve the random token generation **NOT NECESSARY?**
 * make the connection compatible to robertalab
+* add useful error messages
 * ~~add a hal file for methods that would otherwise generate more than one line of code~~ **DONE**
 * ~~transfer the hal file to the robot~~ **DONE**
 * ~~edit the hal file to represent a method for every Block~~ **DONE**
