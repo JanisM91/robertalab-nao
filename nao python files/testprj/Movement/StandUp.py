@@ -1,8 +1,3 @@
-'''
-Created on 06.10.2016
-
-@author: jmohr
-'''
 #Import ALProxy
 from naoqi import ALProxy
 
