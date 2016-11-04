@@ -283,163 +283,163 @@ class hal:
 
         motion.angleInterpolation(names, keys, times, True)
 
-        def applyPosture(pose):
-            posture.goToPosture(pose,1.0)
+    def applyPosture(pose):
+        posture.goToPosture(pose,1.0)
 
-        def pointAt(x, y, z, frame, speed):
-            tracker.pointAt("Arms", [x,y,z], frame, speed)
+    def pointAt(x, y, z, frame, speed):
+        tracker.pointAt("Arms", [x,y,z], frame, speed)
 
-        def LookAt(x, y, z, frame, speed):
-            tracker.lookAt([x,y,z], frame, speed, false)
+    def LookAt(x, y, z, frame, speed):
+        tracker.lookAt([x,y,z], frame, speed, false)
 
-        def stiffnessOn():
-            motion.setStiffnesses("Body",1.0)
-            
-        def stiffnessOff():
-            motion.setStiffnesses("Body",0)
+    def stiffnessOn():
+        motion.setStiffnesses("Body",1.0)
+        
+    def stiffnessOff():
+        motion.setStiffnesses("Body",0)
 
-        def partialStiffnessOn(bodypart):
-            motion.setStiffnesses(bodypart,1.0)
+    def partialStiffnessOn(bodypart):
+        motion.setStiffnesses(bodypart,1.0)
 
-        def partialStiffnessOff(bodypart):
-            motion.setStiffnesses(bodypart,1.0)            
+    def partialStiffnessOff(bodypart):
+        motion.setStiffnesses(bodypart,1.0)            
 
     #Walk
 
-        def walk(x,y,theta):
-            motion.moveTo(x, y, theta)
+    def walk(x,y,theta):
+        motion.moveTo(x, y, theta)
 
-        def stop():
-            motion.stopMove()
+    def stop():
+        motion.stopMove()
 
     #Sounds
 
-        def setVolume(volume):
-            tts.setVolume(volume)
+    def setVolume(volume):
+        tts.setVolume(volume)
 
-        def getVolume():
-            return tts.getVolume();
+    def getVolume():
+        return tts.getVolume();
 
-        def getLanguage():
-            return tts.getLanguage();
+    def getLanguage():
+        return tts.getLanguage();
 
-        def setLanguage(language):
-            tts.setLanguage(language)
+    def setLanguage(language):
+        tts.setLanguage(language)
 
-        def sayText(text):
-            tts.say(text)            
+    def sayText(text):
+        tts.say(text)            
 
     #LEDs
 
-        def setEyeColor(color):
-            led.fadeRGB("FaceLeds", color)
+    def setEyeColor(color):
+        led.fadeRGB("FaceLeds", color)
 
-        def SetEarIntensity(intensity):
-            led.setIntensity("EarLeds", intensity)
+    def SetEarIntensity(intensity):
+        led.setIntensity("EarLeds", intensity)
 
-        def setSingleLed(name, color):
-            led.fadeRGB(name,color)            
+    def setSingleLed(name, color):
+        led.fadeRGB(name,color)            
 
-        def blink():
-            led.fadeRGB("FaceLeds", 0xffffff);
-            time.sleep(0.5);
-            led.fadeRGB("FaceLeds", 0x000000);
-            time.sleep(0.5);
-            led.fadeRGB("FaceLeds", 0xffffff);
+    def blink():
+        led.fadeRGB("FaceLeds", 0xffffff);
+        time.sleep(0.5);
+        led.fadeRGB("FaceLeds", 0x000000);
+        time.sleep(0.5);
+        led.fadeRGB("FaceLeds", 0xffffff);
 
-        def ledOff():
-            led.off()
+    def ledOff():
+        led.off()
 
-        def ledReset():
-            led.reset()
+    def ledReset():
+        led.reset()
 
-        def RandomEyes(duration):
-            led.randomEyes(duration)
+    def RandomEyes(duration):
+        led.randomEyes(duration)
 
-        def rasta(duration):
-            led.rasta(duration)            
+    def rasta(duration):
+        led.rasta(duration)            
 
     #Sensors
-            
-        def accelerometer(coordinate):
-            if coordinate == "X":
-                return memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerX/Sensor/Value")
-            elif coordinate == "Y":
-                return memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerY/Sensor/Value")
-            elif coordinate == "Z":
-                return memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerZ/Sensor/Value")
+        
+    def accelerometer(coordinate):
+        if coordinate == "X":
+            return memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerX/Sensor/Value")
+        elif coordinate == "Y":
+            return memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerY/Sensor/Value")
+        elif coordinate == "Z":
+            return memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerZ/Sensor/Value")
 
-        def touchsensor(position, side):
-            if position == "hand":
-                if side == "left":
-                return memoryProxy.getData("HandLeftBackTouched")
-                elif side == "right":
-                return memoryProxy.getData("HandRightBackTouched")
-            elif position == "bumper":
-                if side == "left":
-                return memoryProxy.getData("LeftBumperPressed")
-                elif side == "right":
-                return memoryProxy.getData("RightBumperPressed")
-
-        def gyrometer(coordinate):
-            if coordinate == "X":
-                return memoryProxy.getData("Device/SubDeviceList/InertialSensor/GyroscopeX/Sensor/Value")
-            elif coordinate == "Y":
-                return memoryProxy.getData("Device/SubDeviceList/InertialSensor/GyroscopeY/Sensor/Value")
-             
-        def sonar():
-            #Subscribe to Sonars, launch them(at Hardware level) and start data acquisition
-            sonar.subscribe("TestApplication")
-
-            #Retrieve sonar data from ALMemory (distance in meters)
-            memory.getData("Device/SubDeviceList/US/Right/Sensor/Value")
-
-            #Unsubscribe from sonars and stop them (at Hardware level)
-            sonar.unsubscribe("TestApplication")
-
-        def fsr(side):
+    def touchsensor(position, side):
+        if position == "hand":
             if side == "left":
-                return memory.getData("leftFootTotalWeight")
-            else:
-                return memory.getData("rightFootTotalWeight")
+            return memoryProxy.getData("HandLeftBackTouched")
+            elif side == "right":
+            return memoryProxy.getData("HandRightBackTouched")
+        elif position == "bumper":
+            if side == "left":
+            return memoryProxy.getData("LeftBumperPressed")
+            elif side == "right":
+            return memoryProxy.getData("RightBumperPressed")
 
-        def naoMark():
-            mark.subscribe("RobertaLab", 500, 0.0)
-            return memory.getData("LandmarkDetected")
+    def gyrometer(coordinate):
+        if coordinate == "X":
+            return memoryProxy.getData("Device/SubDeviceList/InertialSensor/GyroscopeX/Sensor/Value")
+        elif coordinate == "Y":
+            return memoryProxy.getData("Device/SubDeviceList/InertialSensor/GyroscopeY/Sensor/Value")
+         
+    def sonar():
+        #Subscribe to Sonars, launch them(at Hardware level) and start data acquisition
+        sonar.subscribe("TestApplication")
 
-        def recordVideo(resolution, cameraid, time):
-            recordFolder = "/home/nao/recordings/cameras/"
+        #Retrieve sonar data from ALMemory (distance in meters)
+        memory.getData("Device/SubDeviceList/US/Right/Sensor/Value")
 
-            # 0 - 160*120  1 - 320*240  2 - 640*480
-            video.setResolution(resolution)
+        #Unsubscribe from sonars and stop them (at Hardware level)
+        sonar.unsubscribe("TestApplication")
 
-            # 0 - Top  1 - Bottom
-            video.setCameraID(cameraid)
+    def fsr(side):
+        if side == "left":
+            return memory.getData("leftFootTotalWeight")
+        else:
+            return memory.getData("rightFootTotalWeight")
 
-            video.setVideoFormat("MJPG")
-            video.startRecording(recordFolder, "robertaVideo")
-            time.sleep(time)
-            video.stopRecording()
+    def naoMark():
+        mark.subscribe("RobertaLab", 500, 0.0)
+        return memory.getData("LandmarkDetected")
 
-        def takePicture():
-            recordFolder = "/home/nao/recordings/cameras/"
+    def recordVideo(resolution, cameraid, time):
+        recordFolder = "/home/nao/recordings/cameras/"
 
-            # 0 - 160*120  1 - 320*240  2 - 640*480  3 - 1280*960
-            photo.setResolution(1)
+        # 0 - 160*120  1 - 320*240  2 - 640*480
+        video.setResolution(resolution)
 
-            # 0 - Top  1 - Bottom
-            photo.setCameraID(0)
+        # 0 - Top  1 - Bottom
+        video.setCameraID(cameraid)
 
-            photo.setPictureFormat("jpg")
-            photo.takePicture(recordFolder, "robertaPhoto")
+        video.setVideoFormat("MJPG")
+        video.startRecording(recordFolder, "robertaVideo")
+        time.sleep(time)
+        video.stopRecording()
 
-        def selectCamera(cameraId):
-            videoProxy.setActiveCamera(cameraId)
-            
-        def headSensor(position):
-            if position == "front":
-                memoryProxy.getData("FrontTactilTouched")
-            elif position == "middle":
-                memoryProxy.getData("MiddleTactilTouched")
-            elif position == "rear":
-                memoryProxy.getData("RearTactilTouched")
+    def takePicture():
+        recordFolder = "/home/nao/recordings/cameras/"
+
+        # 0 - 160*120  1 - 320*240  2 - 640*480  3 - 1280*960
+        photo.setResolution(1)
+
+        # 0 - Top  1 - Bottom
+        photo.setCameraID(0)
+
+        photo.setPictureFormat("jpg")
+        photo.takePicture(recordFolder, "robertaPhoto")
+
+    def selectCamera(cameraId):
+        videoProxy.setActiveCamera(cameraId)
+        
+    def headSensor(position):
+        if position == "front":
+            memoryProxy.getData("FrontTactilTouched")
+        elif position == "middle":
+            memoryProxy.getData("MiddleTactilTouched")
+        elif position == "rear":
+            memoryProxy.getData("RearTactilTouched")
