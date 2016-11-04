@@ -51,6 +51,7 @@ Open naoconnect.java in your favourite editor. Edit the configuration parameters
 * improve the random token generation **NOT NECESSARY?**
 * make the connection compatible to robertalab
 * add useful error messages
+* test if transfer and commands are possible with SFTP
 * ~~add a hal file for methods that would otherwise generate more than one line of code~~ **DONE**
 * ~~transfer the hal file to the robot~~ **DONE**
 * ~~edit the hal file to represent a method for every Block~~ **DONE**
