@@ -1,9 +1,3 @@
-'''
-Created on 20.10.2016
-
-@author: jmohr
-'''
-
 from naoqi import ALProxy
 import time
 
