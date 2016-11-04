@@ -1,9 +1,3 @@
-'''
-Created on 06.10.2016
-
-@author: jmohr
-'''
-# Choregraphe simplified export in Python.
 from naoqi import ALProxy
 names = list()
 times = list()
