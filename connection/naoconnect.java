@@ -39,7 +39,7 @@ public class naoconnect {
 		
 		//store generated Token
 		generatedToken = generateToken();
-		System.out.println("generated Token: " + generatedToken);															//for testing only
+		System.out.println("generated Token: " + generatedToken);									//for testing only
 		
 		try {
 			writeToken(generatedToken);
@@ -107,6 +107,9 @@ public class naoconnect {
 	
 	private static String generateToken() {
 		//currently all chars are used for the token. test if some are hard to understand and consider to delete them.
+		//the speech engine of the robot makes certain combinations to words instead of single chars 
+		//for example: 7 W is spoken as 7 Watt
+		//maybe edit the token.py generation to add more spaces between the single characters **DONE, requires testing**
 		String chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String token = getTokenString(8,chars);
 		return token;
@@ -125,7 +128,7 @@ public class naoconnect {
 			//from robot configuration
 			writer.write("NAO_IP = \"169.254.235.8\"");
 			writer.write(System.lineSeparator());
-			writer.write("generatedToken = \"" + generatedToken.charAt(0) + " " + generatedToken.charAt(1) + " " +  generatedToken.charAt(2) + " " + generatedToken.charAt(3) + " " + generatedToken.charAt(4) + " " + generatedToken.charAt(5) + " " + generatedToken.charAt(6) + " " + generatedToken.charAt(7) + "\"" );
+			writer.write("generatedToken = \"" + generatedToken.charAt(0) + "  " + generatedToken.charAt(1) + "  " +  generatedToken.charAt(2) + "  " + generatedToken.charAt(3) + "  " + generatedToken.charAt(4) + "  " + generatedToken.charAt(5) + "  " + generatedToken.charAt(6) + "  " + generatedToken.charAt(7) + "\"" );
 			writer.write(System.lineSeparator());
 			writer.write("parser = OptionParser()");
 			writer.write(System.lineSeparator());
@@ -337,6 +340,7 @@ public class naoconnect {
 	**************************************************************open FTP connection and transfer file**********************************************************************
 	*/	
 	
+	//change to FTPS?
 	private static void showServerReply(FTPClient ftpClient) {
 		
         String[] replies = ftpClient.getReplyStrings();
@@ -369,7 +373,7 @@ public class naoconnect {
                 System.out.println("Could not login to the server");
                 return;
             } else {
-                System.out.println("LOGGED IN SERVER!");				//for testing only
+                System.out.println("LOGGED IN SERVER!");					//for testing only
 				
 				//Use local passive mode to avoid problems with firewalls
 				ftpClient.enterLocalPassiveMode();
@@ -391,7 +395,7 @@ public class naoconnect {
 					input.close();
 				}
 				//logout
-				System.out.println("LOGGING OUT!");						//for testing only
+				System.out.println("LOGGING OUT!");							//for testing only
 				ftpClient.logout();
             }
         } catch (IOException e) {
@@ -433,7 +437,7 @@ public class naoconnect {
 			ftpTransfer(server, ftpport, user, pass, "hal.py", false, false, ftpClient);
 		
 		if (tokenchecked) {
-			System.out.println("Token is correct. Transfer file.\n");					//for testing only
+			System.out.println("Token is correct. Transfer file.\n");				//for testing only
 			ftpTransfer(server, ftpport, user, pass, "SitDown.py", true, false, ftpClient);
 			
 			if(CHECKTRANSFER){
