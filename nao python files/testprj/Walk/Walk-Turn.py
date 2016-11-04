@@ -1,9 +1,3 @@
-'''
-Created on 06.10.2016
-
-@author: jmohr
-'''
-
 from naoqi import ALProxy
 
 motion = ALProxy("ALMotion","127.0.0.1",9559)
