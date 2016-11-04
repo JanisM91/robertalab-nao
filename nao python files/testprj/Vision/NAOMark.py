@@ -1,9 +1,3 @@
-'''
-Created on 13.10.2016
-
-@author: jmohr
-'''
-
 from naoqi import ALProxy
 
 IP = "192.168.178.1"
