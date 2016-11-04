@@ -51,7 +51,7 @@ Open naoconnect.java in your favourite editor. Edit the configuration parameters
 * make the connection compatible to robertalab
 * ~~add a hal file for methods that would otherwise generate more than one line of code~~ **DONE**
 * ~~transfer the hal file to the robot~~ **DONE**
-* edit the python files to import the hal file
+* edit the hal file to represent a method for every Block
 
 * ~~The transferred files should be checked. (Maybe via MD5) Method is implemented but not used yet. An additional file needs to be transferred on the robot to do this. Implement this with a switch to disable it.~~ **DONE**
 * ~~The transfer can be done via SSH. The ftp part is not necessary and should therefore be deleted. The method 'sshcommand' has to be extended.~~ **DONE**
