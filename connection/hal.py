@@ -220,7 +220,7 @@ class hal:
 
         motion.angleInterpolation(names, keys, times, True)
 
-    def WipeForehead():
+    def wipeForehead():
         names = list()
         times = list()
         keys = list()
@@ -289,7 +289,7 @@ class hal:
     def pointAt(x, y, z, frame, speed):
         tracker.pointAt("Arms", [x,y,z], frame, speed)
 
-    def LookAt(x, y, z, frame, speed):
+    def lookAt(x, y, z, frame, speed):
         tracker.lookAt([x,y,z], frame, speed, false)
 
     def stiffnessOn():
@@ -334,7 +334,7 @@ class hal:
     def setEyeColor(color):
         led.fadeRGB("FaceLeds", color)
 
-    def SetEarIntensity(intensity):
+    def setEarIntensity(intensity):
         led.setIntensity("EarLeds", intensity)
 
     def setSingleLed(name, color):
@@ -353,7 +353,7 @@ class hal:
     def ledReset():
         led.reset()
 
-    def RandomEyes(duration):
+    def randomEyes(duration):
         led.randomEyes(duration)
 
     def rasta(duration):
@@ -436,7 +436,7 @@ class hal:
     def selectCamera(cameraId):
         videoProxy.setActiveCamera(cameraId)
         
-    def headSensor(position):
+    def headsensor(position):
         if position == "front":
             memoryProxy.getData("FrontTactilTouched")
         elif position == "middle":
