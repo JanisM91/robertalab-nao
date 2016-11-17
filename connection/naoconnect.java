@@ -370,7 +370,7 @@ public class naoconnect {
             showServerReply(ftpClient);
 			
             if (!success) {
-                System.out.println("Could not login to the server");
+                System.out.println("Could not login to the FTP server!");
                 return;
             } else {
                 System.out.println("LOGGED IN SERVER!");					//for testing only
@@ -399,7 +399,7 @@ public class naoconnect {
 				ftpClient.logout();
             }
         } catch (IOException e) {
-            System.out.println("Something wrong happened!");
+            System.out.println("There was an error during transfer:");
             e.printStackTrace();
         }
 	}
