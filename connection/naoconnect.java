@@ -288,6 +288,7 @@ public class naoconnect {
 			Session session = jsch.getSession(user, server, port);
 			session.setPassword(pass);
 			session.setUserInfo(ui);
+			session.setTimeout(5);
 			
 			//fingerprint is not accepted
 			//uncomment this part if key fingerprint is not accepted
