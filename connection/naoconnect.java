@@ -126,7 +126,7 @@ public class naoconnect {
 			writer.write("from optparse import OptionParser");
 			writer.write(System.lineSeparator());
 			//from robot configuration
-			writer.write("NAO_IP = \"169.254.235.8\"");
+			writer.write("NAO_IP = \"169.254.6.238\"");
 			writer.write(System.lineSeparator());
 			writer.write("generatedToken = \"" + generatedToken.charAt(0) + "  " + generatedToken.charAt(1) + "  " +  generatedToken.charAt(2) + "  " + generatedToken.charAt(3) + "  " + generatedToken.charAt(4) + "  " + generatedToken.charAt(5) + "  " + generatedToken.charAt(6) + "  " + generatedToken.charAt(7) + "\"" );
 			writer.write(System.lineSeparator());
@@ -288,7 +288,7 @@ public class naoconnect {
 			Session session = jsch.getSession(user, server, port);
 			session.setPassword(pass);
 			session.setUserInfo(ui);
-			session.setTimeout(5);
+			session.setTimeout(50000);
 			
 			//fingerprint is not accepted
 			//uncomment this part if key fingerprint is not accepted
@@ -410,15 +410,15 @@ public class naoconnect {
 		//only set true if the transfer should be validated with MD5 Checksum
 		final boolean CHECKTRANSFER = false;
 		//set true if a token should be generated, tranferred and checked
-		final boolean CHECKTOKEN = true;
+		final boolean CHECKTOKEN = false;
 		//set true if the hal file should be transferred first
-		final boolean TRANSFERHAL = false;
+		final boolean TRANSFERHAL = true;
 		
 		JSch jsch = new JSch();
 		FTPClient ftpClient = new FTPClient();
 		
 		//these information should come from the robotconfiguration in the robertalab
-		String server = "169.254.235.8";
+		String server = "169.254.6.238";
 		String user = "nao";
 		String pass = "nao";
 		
@@ -429,8 +429,8 @@ public class naoconnect {
 		String filename = "Roberta.py";
 		String execute = "python " + filename;
 		String remove = "rm " + filename;
-		boolean tokenchecked = false;
-		
+		boolean tokenchecked = true;
+				
 		if(CHECKTOKEN)
 			tokenchecked = tokencheck(server, sshport, user, pass, jsch, ftpClient);
 	
@@ -438,8 +438,8 @@ public class naoconnect {
 			ftpTransfer(server, ftpport, user, pass, "hal.py", false, false, ftpClient);
 		
 		if (tokenchecked) {
-			System.out.println("Token is correct. Transfer file.\n");				//for testing only
-			ftpTransfer(server, ftpport, user, pass, "SitDown.py", true, false, ftpClient);
+			System.out.println("\n\nToken is correct. Transfer file.");				//for testing only
+			ftpTransfer(server, ftpport, user, pass, "lab.py", true, false, ftpClient);
 			
 			if(CHECKTRANSFER){
 				if(!validateTransfer(server, sshport, ftpport, user, pass, jsch, ftpClient, false)) {
@@ -447,10 +447,10 @@ public class naoconnect {
 					System.exit(-1);
 				}
 			}
-			System.out.println("Token is correct. Execute file.\n");				//for testing only
+			System.out.println("\n\nToken is correct. Execute file.\n");				//for testing only
 			sshCommand(server, sshport, user, pass, jsch, execute);
-			System.out.println("Token is correct. Remove file.\n");					//for testing only
-			sshCommand(server, sshport, user, pass, jsch, remove);
+			System.out.println("\n\nToken is correct. Remove file.\n");					//for testing only
+			//sshCommand(server, sshport, user, pass, jsch, remove);
 		}
 		System.out.println("Exit!");												//for testing only
 	}
