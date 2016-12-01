@@ -330,7 +330,7 @@ class Hal(object):
     #LEDs
 
     def setEyeColor(self, color):
-        self.led.fadeRGB("FaceLeds", color)
+        self.led.fadeRGB("FaceLeds", color, 1)
 
     def setEarIntensity(self, intensity):
         self.led.setIntensity("EarLeds", intensity)
