@@ -48,14 +48,13 @@ Open naoconnect.java in your favourite editor. Edit the configuration parameters
 ### TODO
 
 * informations (server, user, password) should be obtained from robotconfiguration
-* improve the random token generation **NOT NECESSARY?**
 * make the connection compatible to robertalab
-* add useful error messages
 * test if transfer and commands are possible with SFTP
+* ~~add useful error messages~~ **DONE**
+* ~~improve the random token generation **NOT NECESSARY?**~~
 * ~~add a hal file for methods that would otherwise generate more than one line of code~~ **DONE**
 * ~~transfer the hal file to the robot~~ **DONE**
 * ~~edit the hal file to represent a method for every Block~~ **DONE**
-
 * ~~The transferred files should be checked. (Maybe via MD5) Method is implemented but not used yet. An additional file needs to be transferred on the robot to do this. Implement this with a switch to disable it.~~ **DONE**
 * ~~The transfer can be done via SSH. The ftp part is not necessary and should therefore be deleted. The method 'sshcommand' has to be extended.~~ **DONE**
 * ~~String for file copying over SSH/SCP should be generated out of variables~~ **DONE**
