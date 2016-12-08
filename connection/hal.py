@@ -285,10 +285,10 @@ class Hal(object):
         self.posture.goToPosture(pose,1.0)
 
     def pointAt(self, x, y, z, frame, speed):
-        self.tracker.pointAt("Arms", [(float)x, (float)y, (float)z], frame, speed)
+        self.tracker.pointAt("Arms", [x, y, z], frame, speed)
 
     def lookAt(self, x, y, z, frame, speed):
-        self.tracker.lookAt( [(float)x, (float)y, (float)z], frame, speed, false)
+        self.tracker.lookAt( [x, y, z], frame, speed, 0)
 
     def stiffnessOn(self):
         self.motion.setStiffnesses("Body",1.0)
@@ -336,20 +336,20 @@ class Hal(object):
         self.led.setIntensity("EarLeds", intensity)
 
     def setSingleLed(self, name, color):
-        self.led.fadeRGB(name,color)            
+        self.led.fadeRGB(name,color,1)            
 
     def blink(self):
-        self.led.fadeRGB("FaceLeds", 0xffffff);
+        self.led.fadeRGB("FaceLeds", 0xffffff, 1);
         time.sleep(0.5);
-        self.led.fadeRGB("FaceLeds", 0x000000);
+        self.led.fadeRGB("FaceLeds", 0x000000, 1);
         time.sleep(0.5);
-        self.led.fadeRGB("FaceLeds", 0xffffff);
+        self.led.fadeRGB("FaceLeds", 0xffffff, 1);
 
     def ledOff(self):
-        self.led.off()
+        self.led.off("FaceLeds")
 
     def ledReset(self):
-        self.led.reset()
+        self.led.reset("FaceLeds")
 
     def randomEyes(self, duration):
         self.led.randomEyes(duration)
