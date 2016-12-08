@@ -285,10 +285,10 @@ class Hal(object):
         self.posture.goToPosture(pose,1.0)
 
     def pointAt(self, x, y, z, frame, speed):
-        self.tracker.pointAt("Arms", [x,y,z], frame, speed)
+        self.tracker.pointAt("Arms", [(float)x, (float)y, (float)z], frame, speed)
 
-    def lookAt(self,x, y, z, frame, speed):
-        self.tracker.lookAt([x,y,z], frame, speed, false)
+    def lookAt(self, x, y, z, frame, speed):
+        self.tracker.lookAt( [(float)x, (float)y, (float)z], frame, speed, false)
 
     def stiffnessOn(self):
         self.motion.setStiffnesses("Body",1.0)
@@ -300,7 +300,7 @@ class Hal(object):
         self.motion.setStiffnesses(bodypart,1.0)
 
     def partialStiffnessOff(self, bodypart):
-        self.motion.setStiffnesses(bodypart,1.0)            
+        self.motion.setStiffnesses(bodypart,0)            
 
     #Walk
 
@@ -324,7 +324,7 @@ class Hal(object):
     def setLanguage(self, language):
         self.tts.setLanguage(language)
 
-    def sayText(self, text):
+    def say(self, text):
         self.tts.say(text)            
 
     #LEDs
