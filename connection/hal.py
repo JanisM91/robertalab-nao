@@ -32,40 +32,47 @@ class Hal(object):
         self.sonar = ALProxy("ALSonar")
         self.led = ALProxy("ALLeds")
         self.video = ALProxy("ALVideoRecorder")
-		self.asr = ALProxy("ALSpeechRecognitionProxy")
-		self.aup = ALProxy("ALAudioPlayerProxy")
+	self.asr = ALProxy("ALSpeechRecognition")
+	self.aup = ALProxy("ALAudioPlayer")
 
     #MOVEMENT
 	
-	def mode(self, modus)
-		if modus == 1:
-			self.posture.goToPosture("Stand",1.0)
-		elif modus == 2
-			self.posture.goToPosture("Sit",1.0)
+    def mode(self, modus):
+	if modus == 1:
+            self.posture.goToPosture("Stand",1.0)
+	elif modus == 2:
+            self.posture.goToPosture("Sit",1.0)
 		
-	def applyPosture(self, pose):
-        self.posture.goToPosture(pose,1.0)
+    def applyPosture(self, pose):
+       self.posture.goToPosture(pose,1.0)
 		
-	def stiffness(self, bodypart, status):
-		if status == 1:
-			self.motion.setStiffnesses(bodypart,1.0)
-		elif status == 2:
-			self.motion.setStiffnesses(bodypart,0)
-			
-	def savePosition(self, bodypart):
+    def stiffness(self, bodypart, status):
+	if status == 1:
+            self.motion.setStiffnesses(bodypart,1.0)
+	elif status == 2:
+            self.motion.setStiffnesses(bodypart,0)
 		
-	#WALK
+    def hand(self, handName, mode):
+        if mode == 1:
+            self.motion.openHand(handName);
+        elif mode == 2:
+            self.motion.closeHand(handName);
+
+    def moveJoint(self, jointName, degrees):
+          motion.angleInterpolation(jointName, degrees, 1.0, True);
+		
+    #WALK
 	
-	def walk(self, x, y, theta):
+    def walk(self, x, y, theta):
         self.motion.moveTo(x, y, theta)
 
     def stop(self):
         self.motion.stopMove()
+        
 	
+    #ANIMATIONS
 	
-	#ANIMATIONS
-	
-	def taiChi(self):
+    def taiChi(self):
         names = list()
         times = list()
         keys = list()
@@ -178,7 +185,7 @@ class Hal(object):
 
         self.motion.angleInterpolation(names, keys, times, True)
 		
-	def wave(self):
+    def wave(self):
         names = list()
         times = list()
         keys = list()
@@ -304,22 +311,22 @@ class Hal(object):
 
         self.motion.angleInterpolation(names, keys, times, True)
 		
-	def blink(self):
+    def blink(self):
         self.led.fadeRGB("FaceLeds", 0xffffff, 1);
         time.sleep(0.5);
         self.led.fadeRGB("FaceLeds", 0x000000, 1);
         time.sleep(0.5);
         self.led.fadeRGB("FaceLeds", 0xffffff, 1);
 		
-	def pointLookAt(self, x, y, z, frame, speed, mode):
-		if mode == 0:
-			self.tracker.pointAt("Arms", [x, y, z], frame, speed)
-		elif mode == 1:
-			self.tracker.lookAt( [x, y, z], frame, speed, 0)
+    def pointLookAt(self, x, y, z, frame, speed, mode):
+	if mode == 0:
+		self.tracker.pointAt("Arms", [x, y, z], frame, speed)
+	elif mode == 1:
+		self.tracker.lookAt( [x, y, z], frame, speed, 0)
 	
-	#SOUNDS
+    #SOUNDS
 	
-	def setVolume(self, volume):
+    def setVolume(self, volume):
         self.tts.setVolume(volume)
 
     def getVolume(self):
@@ -334,37 +341,41 @@ class Hal(object):
     def say(self, text):
         self.tts.say(text)
 		
-	def playFile(self, filename):
-		self.aup.playFile("/usr/share/naoqi/wav/" + filename)
+    def playFile(self, filename):
+	self.aup.playFile("/usr/share/naoqi/wav/" + filename)
 		
-	def dataChanged(self, strVarName, value):
-		self.tts.say(strVarName + " " + value)
+    def dataChanged(self, strVarName, value):
+        self.tts.say("ALARM!")
+	self.tts.say(strVarName + " " + value)
 		
-	def dialog(self, phrase, answer):
-		vocabulary = [phrase]
-		self.asr.setAudioExpression(True)
-		self.asr.setVisualExpression(True)
-		self.asr.setVocabulary(vocabulary, False)
-		self.asr.subscribe("Open_Roberta")
-		self.memory.subscribeToEvent("WordRecognized", "Module", "dataChanged")
-		self.asr.unsubscribe("Open_Roberta")
-		
-	def recognizeWord(self, phrase, answer):
-		vocabulary = [phrase]
-		self.asr.setAudioExpression(True)
-		self.asr.setVisualExpression(True)
-		self.asr.setVocabulary(vocabulary, False)
-		self.asr.subscribe("Open_Roberta")
-		self.memory.subscribeToEvent("WordRecognized", "Module", "dataChanged")
-		self.asr.unsubscribe("Open_Roberta")
+    def dialog(self, phrase, answer):
+	vocabulary = [phrase]
+	self.asr.setAudioExpression(True)
+	self.asr.setVisualExpression(True)
+	self.asr.setVocabulary(vocabulary, False)
+	self.asr.subscribe("Open_Roberta")
+	self.memory.subscribeToEvent("WordRecognized", "Module", "dataChanged")
+	self.tts.say("HERE!")
+	self.asr.setAudioExpression(False)
+	self.asr.setVisualExpression(False)
+        self.asr.unsubscribe("Open_Roberta")
 	
-	#LIGHTS
+    def recognizeWord(self, phrase, answer):
+	vocabulary = [phrase]
+	self.asr.setAudioExpression(True)
+	self.asr.setVisualExpression(True)
+	self.asr.setVocabulary(vocabulary, False)
+	self.asr.subscribe("Open_Roberta")
+	self.memory.subscribeToEvent("WordRecognized", "Module", "dataChanged")
+	self.asr.unsubscribe("Open_Roberta")
+
+    #LIGHTS
 	
-	def setLeds(self, name, color, intensity)
-		self.led.fadeRGB(name, color, 1)
-		self.led.setIntensity(name, intensity)
-	
-	def ledOff(self):
+    def setLeds(self, name, color, intensity):
+	self.led.fadeRGB(name, color, 1)
+	self.led.setIntensity(name, intensity)
+
+    def ledOff(self):
         self.led.off("FaceLeds")
 
     def ledReset(self):
@@ -376,9 +387,9 @@ class Hal(object):
     def rasta(self, duration):
         self.led.rasta(duration)
 		
-	#VISION
+    #VISION
 	
-	def recordVideo(self, resolution, cameraId, time):
+    def recordVideo(self, resolution, cameraId, time):
         recordFolder = "/home/nao/recordings/cameras/"
 
         # 0 - 160*120  1 - 320*240  2 - 640*480
@@ -404,9 +415,9 @@ class Hal(object):
         self.photo.setPictureFormat("jpg")
         self.photo.takePicture(recordFolder, "robertaPhoto")
 	
-	#SENSORS
+    #SENSORS
 	
-	 def accelerometer(self, coordinate):
+    def accelerometer(self, coordinate):
         if coordinate == "X":
             return self.memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerX/Sensor/Value")
         elif coordinate == "Y":
@@ -414,7 +425,7 @@ class Hal(object):
         elif coordinate == "Z":
             return self.memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerZ/Sensor/Value")
 			
-	def gyrometer(self, coordinate):
+    def gyrometer(self, coordinate):
         if coordinate == "X":
             return self.memoryProxy.getData("Device/SubDeviceList/InertialSensor/GyroscopeX/Sensor/Value")
         elif coordinate == "Y":
