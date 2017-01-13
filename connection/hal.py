@@ -59,7 +59,7 @@ class Hal(object):
             self.motion.closeHand(handName);
 
     def moveJoint(self, jointName, degrees):
-          motion.angleInterpolation(jointName, degrees, 1.0, True);
+          self.motion.setAngles(jointName, degrees, 0.2);
 		
     #WALK
 	
@@ -322,7 +322,7 @@ class Hal(object):
 	if mode == 0:
 		self.tracker.pointAt("Arms", [x, y, z], frame, speed)
 	elif mode == 1:
-		self.tracker.lookAt( [x, y, z], frame, speed, 0)
+		self.tracker.lookAt( [x, y, z], frame, speed, False)
 	
     #SOUNDS
 	
@@ -342,7 +342,7 @@ class Hal(object):
         self.tts.say(text)
 		
     def playFile(self, filename):
-	self.aup.playFile("/usr/share/naoqi/wav/" + filename)
+	self.aup.playFile("/usr/share/naoqi/wav/" + filename + ".wav")
 		
     def dataChanged(self, strVarName, value):
         self.tts.say("ALARM!")
@@ -372,8 +372,8 @@ class Hal(object):
     #LIGHTS
 	
     def setLeds(self, name, color, intensity):
-	self.led.fadeRGB(name, color, 1)
-	self.led.setIntensity(name, intensity)
+	self.led.fadeRGB(name, color, 0.1)
+        self.led.setIntensity(name, intensity/100.0)
 
     def ledOff(self):
         self.led.off("FaceLeds")
@@ -392,13 +392,19 @@ class Hal(object):
     def recordVideo(self, resolution, cameraId, time):
         recordFolder = "/home/nao/recordings/cameras/"
 
+        self.video.setFrameRate(10.0)
+        
         # 0 - 160*120  1 - 320*240  2 - 640*480
         self.video.setResolution(resolution)
 
         # 0 - Top  1 - Bottom
-        self.video.setCameraID(cameraId)
+        if cameraId == "Top":
+            self.video.setCameraID(0)
+        else:
+            self.video.setCameraID(1)
 
-        self.video.setVideoFormat("MJPG")
+        
+        #self.video.setVideoFormat("MJPG")
         self.video.startRecording(recordFolder, "robertaVideo")
         time.sleep(time)
         self.video.stopRecording()
@@ -410,7 +416,10 @@ class Hal(object):
         self.photo.setResolution(1)
 
         # 0 - Top  1 - Bottom
-        self.photo.setCameraID(cameraId)
+        if cameraId == "Top":
+            self.photo.setCameraID(0)
+        else:
+            self.photo.setCameraID(1)
 
         self.photo.setPictureFormat("jpg")
         self.photo.takePicture(recordFolder, "robertaPhoto")
@@ -419,24 +428,24 @@ class Hal(object):
 	
     def accelerometer(self, coordinate):
         if coordinate == "X":
-            return self.memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerX/Sensor/Value")
+            return self.memory.getData("Device/SubDeviceList/InertialSensor/AccelerometerX/Sensor/Value")
         elif coordinate == "Y":
-            return self.memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerY/Sensor/Value")
+            return self.memory.getData("Device/SubDeviceList/InertialSensor/AccelerometerY/Sensor/Value")
         elif coordinate == "Z":
-            return self.memoryProxy.getData("Device/SubDeviceList/InertialSensor/AccelerometerZ/Sensor/Value")
+            return self.memory.getData("Device/SubDeviceList/InertialSensor/AccelerometerZ/Sensor/Value")
 			
     def gyrometer(self, coordinate):
         if coordinate == "X":
-            return self.memoryProxy.getData("Device/SubDeviceList/InertialSensor/GyroscopeX/Sensor/Value")
+            return self.memory.getData("Device/SubDeviceList/InertialSensor/GyroscopeX/Sensor/Value")
         elif coordinate == "Y":
-            return self.memoryProxy.getData("Device/SubDeviceList/InertialSensor/GyroscopeY/Sensor/Value")
+            return self.memory.getData("Device/SubDeviceList/InertialSensor/GyroscopeY/Sensor/Value")
          
     def sonar(self):
         #Subscribe to Sonars, launch them(at Hardware level) and start data acquisition
         self.sonar.subscribe("TestApplication")
 
         #Retrieve sonar data from ALMemory (distance in meters)
-        return self.memory.getData("Device/SubDeviceList/US/Right/Sensor/Value")
+        #return self.memory.getData("Device/SubDeviceList/US/Right/Sensor/Value")
 
         #Unsubscribe from sonars and stop them (at Hardware level)
         self.sonar.unsubscribe("TestApplication")
@@ -447,7 +456,7 @@ class Hal(object):
         else:
             return self.memory.getData("rightFootTotalWeight")   
 
-    def touchsensor(self, position, side):
+    def touchsensors(self, position, side):
         if position == "hand":
             if side == "left":
                 return self.memoryProxy.getData("HandLeftBackTouched")
