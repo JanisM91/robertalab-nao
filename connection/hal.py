@@ -34,6 +34,7 @@ class Hal(object):
         self.video = ALProxy("ALVideoRecorder")
 	self.asr = ALProxy("ALSpeechRecognition")
 	self.aup = ALProxy("ALAudioPlayer")
+	self.fd = ALProxy("ALFaceDetection")
 
     #MOVEMENT
 	
@@ -477,3 +478,12 @@ class Hal(object):
     def naoMark(self):
         self.mark.subscribe("RobertaLab", 500, 0.0)
         return self.memory.getData("LandmarkDetected")
+
+    def learnFace(self, name):
+        self.fd.learnFace(name)
+
+    def forgetFace(self, name):
+        self.fd.forgetPerson(name)
+
+    def detectFace(self):
+        self.fd.setRecoginitionEnabled(True)
