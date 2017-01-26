@@ -59,8 +59,11 @@ class Hal(object):
         elif mode == 2:
             self.motion.closeHand(handName);
 
-    def moveJoint(self, jointName, degrees):
-          self.motion.setAngles(jointName, degrees, 0.2);
+    def moveJoint(self, jointName, degrees, mode):
+		if mode == 1:
+			self.motion.setAngles(jointName, degrees, 0.2);
+		elif mode == 2:
+			self.motion.changeAngles(jointName, degrees, 0.2);
 		
     #WALK
 	
@@ -390,9 +393,9 @@ class Hal(object):
 		
     #VISION
 	
-    def recordVideo(self, resolution, cameraId, time):
+    def recordVideo(self, resolution, cameraId, duration, fileName):
         recordFolder = "/home/nao/recordings/cameras/"
-
+        self.video.stopRecording()
         self.video.setFrameRate(10.0)
         
         # 0 - 160*120  1 - 320*240  2 - 640*480
@@ -406,11 +409,11 @@ class Hal(object):
 
         
         #self.video.setVideoFormat("MJPG")
-        self.video.startRecording(recordFolder, "robertaVideo")
-        time.sleep(time)
+        self.video.startRecording(recordFolder, fileName)
+        time.sleep(duration)
         self.video.stopRecording()
 
-    def takePicture(self, cameraId):
+    def takePicture(self, cameraId, fileName):
         recordFolder = "/home/nao/recordings/cameras/"
 
         # 0 - 160*120  1 - 320*240  2 - 640*480  3 - 1280*960
@@ -423,7 +426,7 @@ class Hal(object):
             self.photo.setCameraID(1)
 
         self.photo.setPictureFormat("jpg")
-        self.photo.takePicture(recordFolder, "robertaPhoto")
+        self.photo.takePicture(recordFolder, fileName)
 	
     #SENSORS
 	
