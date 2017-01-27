@@ -60,20 +60,21 @@ class Hal(object):
             self.motion.closeHand(handName);
 
     def moveJoint(self, jointName, degrees, mode):
+        rad = radians(degrees)
 		if mode == 1:
-			self.motion.setAngles(jointName, degrees, 0.2);
+			self.motion.setAngles(jointName, rad, 0.2);
 		elif mode == 2:
-			self.motion.changeAngles(jointName, degrees, 0.2);
+			self.motion.changeAngles(jointName, rad, 0.2);
 		
     #WALK
 	
     def walk(self, x, y, theta):
-        self.motion.moveTo(x, y, theta)
+        rad = radians(theta)
+        self.motion.moveTo(x, y, rad)
 
     def stop(self):
         self.motion.stopMove()
         
-	
     #ANIMATIONS
 	
     def taiChi(self):
