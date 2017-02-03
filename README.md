@@ -3,6 +3,11 @@
 ### Introduction
 Make a connection between robertalab and NAO possible and allow the robertalab to generate python code for NAO.
 
+### NAOProgram
+
+
+
+
 ### Folder nao python files
 
 These python files are made to run on a NAO. Some will only work as remote module. You need to change the ip in order to make these work on your robot. The structure of the folders reprents the structure that is planned for the implementation of the robot NAO into the Open Roberta Lab.
@@ -27,7 +32,7 @@ This is currently under development. Further information are in the comments in 
 
 
 
-### Testing
+### Testing of the console programm (mainly for developing and testing)
 
 A NAO V4 or V5 is required and you need the latest version of [Java](https://java.com/de/download/).
 Additionaly these .jar's are required:
@@ -45,11 +50,11 @@ Open naoconnect.java in your favourite editor. Edit the configuration parameters
 * Execute it: java -cp commons-net-3.1.jar;jsch-0.1.54.jar;. naoconnect
 
 
-### TODO
+### OLD TODO
 
-* informations (server, user, password) should be obtained from robotconfiguration
-* make the connection compatible to robertalab
-* test if transfer and commands are possible with SFTP
+* ~~informations (server, user, password) should be obtained from robotconfiguration~~
+* ~~make the connection compatible to robertalab~~
+* ~~test if transfer and commands are possible with SFTP~~
 * ~~add useful error messages~~ **DONE**
 * ~~improve the random token generation **NOT NECESSARY?**~~
 * ~~add a hal file for methods that would otherwise generate more than one line of code~~ **DONE**
