@@ -3,10 +3,6 @@
 ### Introduction
 Make a connection between robertalab and NAO possible and allow the robertalab to generate python code for NAO.
 
-### NAOProgram
-
-
-
 
 ### Folder nao python files
 
