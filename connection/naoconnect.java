@@ -27,7 +27,7 @@ public class naoconnect {
 	**************************************************************send and check token**********************************************************************
 	*/
 	
-	//neds to be edited to be compatible with the server. Are Dialogs possible on serverside?
+	//needs to be edited to be compatible with the server. Are Dialogs possible on serverside?
 	private static boolean tokencheck(String server, int sshport, String user, String pass, JSch jsch, FTPClient ftpClient) {
 		
 		//set this as true to enable the comparison of the copied token with the generated one
@@ -455,7 +455,7 @@ public class naoconnect {
 		System.out.println("Exit!");												//for testing only
 	}
 
-	//abstract MyUserInfo needed for ssh conection. maybe not required. test the ssh connection without it.
+	//abstract MyUserInfo needed for ssh conection.
 	public static abstract class MyUserInfo implements UserInfo, UIKeyboardInteractive{
 		public String getPassword(){return null;}
 		public boolean promptYesNo(String str){return false;}
