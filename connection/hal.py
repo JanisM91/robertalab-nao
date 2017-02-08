@@ -7,7 +7,7 @@ import time
 class Hal(object):
 
     def __init__(self):
-        self.NAO_IP = "169.254.6.238"    #from robotconfiguration
+        self.NAO_IP = "169.254.6.238"
         parser = OptionParser()
         parser.add_option("--pip",help="Parent broker port. The IP address or your robot", dest="pip")
         parser.add_option("--pport",help="Parent broker port. The port NAOqi is listening to",dest="pport",type="int")
@@ -70,6 +70,8 @@ class Hal(object):
 	
     def walk(self, x, y, theta):
         rad = radians(theta)
+        x = x/100
+        y = y/100
         self.motion.moveTo(x, y, rad)
 
     def stop(self):
